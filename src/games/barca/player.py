@@ -2,12 +2,14 @@ from abc import ABC
 
 from games.player import Player
 from games.barca.result import BarcaResult
+from games.barca.pieces.elephant import Elephant
 
 
 class BarcaPlayer(Player, ABC):
 
     def __init__(self, name):
         super().__init__(name)
+        self.pieces = [Elephant(), Elephant()]
 
         self.__stats = {}
         for bres in BarcaResult:
