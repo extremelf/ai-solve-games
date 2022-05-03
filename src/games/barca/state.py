@@ -13,7 +13,7 @@ class BarcaState(State):
 
         self.__grid = [BarcaState.EMPTY_CELL for _i in range(self.__num_cols) for _j in range(self.__num_rows)]
 
-        #Places the pieces in the board, very initial way
+        # Places the pieces in the board, very initial way
         self.__grid[4] = BarcaPiece.Elephant.__str__()
         self.__grid[5] = BarcaPiece.Elephant.__str__()
         self.__grid[94] = BarcaPiece.Elephant.__str__()
