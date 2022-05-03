@@ -21,5 +21,5 @@ class BarcaPiece:
         pass
 
     @abstractmethod
-    def get_legal_moves(self, state):
+    def possible_moves(self):
         pass
