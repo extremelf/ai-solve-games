@@ -4,7 +4,7 @@ from games.barca.piece import BarcaPiece
 class Mouse(BarcaPiece):
     position_x = None
     position_y = None
-    list_moves = list()
+
 
     def __init__(self, name):
         super().__init__(name)
@@ -23,3 +23,5 @@ class Mouse(BarcaPiece):
              0 <= self.position_x < 10]
         r = [(self.position_y, self.position_x + i) for i in range(1, 10) if 0 <= self.position_y < 10 and
              0 <= self.position_x < 10]
+
+        return u + d + l + r
