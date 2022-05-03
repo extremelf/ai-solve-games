@@ -1,5 +1,5 @@
 from games.state import State
-from pieces import BarcaPiece
+from piece import BarcaPiece
 
 
 class BarcaState(State):
