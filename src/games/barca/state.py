@@ -1,5 +1,8 @@
 from games.state import State
 from piece import BarcaPiece
+from player import BarcaPlayer
+
+"player->pieces->coordenadas"
 
 
 class BarcaState(State):
@@ -13,7 +16,7 @@ class BarcaState(State):
 
         self.__grid = [BarcaState.EMPTY_CELL for _i in range(self.__num_cols) for _j in range(self.__num_rows)]
 
-        #Places the pieces in the board, very initial way
+        # Places the pieces in the board, very initial way
         self.__grid[4] = BarcaPiece.Elephant.__str__()
         self.__grid[5] = BarcaPiece.Elephant.__str__()
         self.__grid[94] = BarcaPiece.Elephant.__str__()
@@ -37,3 +40,20 @@ class BarcaState(State):
 
     def get_grid(self):
         return self.__grid
+
+    def get_opponent_cords(self, player):
+        opponent_pieces_coords = player.pieces.get_current_position
+
+
+
+    def get_legal_moves(self, piece, opponent_pieces_coords):
+
+        all_moves = piece.possible_moves
+
+        ilegal_coords = opponent_pieces_coords
+
+        for moves in all_moves:
+            if moves in ilegal_coords:
+                all_moves.remove(moves)
+
+        return moves
