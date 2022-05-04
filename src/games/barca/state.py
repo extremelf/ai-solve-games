@@ -1,3 +1,5 @@
+from games.barca.pieces.lion import Lion
+from games.barca.pieces.mouse import Mouse
 from games.state import State
 from piece import BarcaPiece
 from player import BarcaPlayer
@@ -66,6 +68,18 @@ class BarcaState(State):
         for piece in opponent.pieces:
                 # Falta descobrir como � que nao vou meter peças a passar por cima umas das outras
                 current_pos = piece.get_current_pos()
+
+    def is_in_fear(self):
+
+        # Need to check how will it be arround it
+        opponent = self.__players[1] if self.__action_player == self.__players[0] else self.__players[0]
+
+        if self.__acting_player.pieces[Elephant].get_current_pos() == (opponent.pieces[Mouse].get_current_pos()+1):
+            legal_moves = self.__acting_player.pieces[Elephant].possible_moves()
+        elif self.__acting_player.pieces[Lion].get_current_pos() == (opponent.pieces[Elephant].get_current_pos()+1):
+            legal_moves = self.__acting_player.pieces[Lion].possible_moves()
+        elif self.__acting_player.pieces[Mouse].get_current_pos() == (opponent.pieces[Lion].get_current_pos() + 1):
+            legal_moves = self.__acting_player.pieces[Mouse].possible_moves()
 
 
 
