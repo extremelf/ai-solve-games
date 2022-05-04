@@ -41,6 +41,10 @@ class BarcaState(State):
     def get_grid(self):
         return self.__grid
 
+    def get_opponent_cords(self, player):
+        opponent_pieces_coords = player.pieces.get_current_position
+
+
 
     def get_legal_moves(self, piece, opponent_pieces_coords):
 
