@@ -1,5 +1,8 @@
 from games.state import State
 from piece import BarcaPiece
+from player import BarcaPlayer
+
+"player->pieces->coordenadas"
 
 
 class BarcaState(State):
@@ -37,3 +40,16 @@ class BarcaState(State):
 
     def get_grid(self):
         return self.__grid
+
+
+    def get_legal_moves(self, piece, opponent_pieces_coords):
+
+        all_moves = piece.possible_moves
+
+        ilegal_coords = opponent_pieces_coords
+
+        for moves in all_moves:
+            if moves in ilegal_coords:
+                all_moves.remove(moves)
+
+        return moves
