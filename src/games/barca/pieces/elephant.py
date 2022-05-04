@@ -34,3 +34,6 @@ class Elephant(BarcaPiece):
              0 <= self.positionx < 10 and 0 <= self.positiony < 10]
 
         return ur + ul + dr + dl + u + d + l + r
+
+    def get_current_pos(self) -> list[int]:
+        return [self.positionx, self.positiony]

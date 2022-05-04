@@ -9,7 +9,7 @@ class BarcaPlayer(Player, ABC):
 
     def __init__(self, name):
         super().__init__(name)
-        self.pieces = [Elephant(), Elephant()]
+        self.pieces = [Elephant("elephant"), Elephant("elephant")]
 
         self.__stats = {}
         for bres in BarcaResult:

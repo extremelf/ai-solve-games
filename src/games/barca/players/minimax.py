@@ -9,7 +9,7 @@ from games.barca.pieces.elephant import Elephant
 class MinimaxBarcaPlayer(BarcaPlayer):
     def __init__(self, name):
         super().__init__(name)
-        self.__pieces = [Elephant(),Elephant()]
+
 
 
     def __heuristic(self, state: BarcaState):

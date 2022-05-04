@@ -10,8 +10,9 @@ class BarcaPiece:
     def get_name(self):
         return self.__name
 
+    @abstractmethod
     def get_current_pos(self):
-        return self.__current_pos
+        pass
 
     def set_current_pos(self, new_pos):
         self.__current_pos = new_pos
