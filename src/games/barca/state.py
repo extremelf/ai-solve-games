@@ -58,8 +58,14 @@ class BarcaState(State):
                 if isinstance(piece, Elephant):
                     grid[current_pos[0]][current_pos[1]] = "E"
 
-    def get_opponent_cords(self, player):
-        opponent_pieces_coords = player.pieces.get_current_position
+    def get_opponent_cords(self):
+        # opponent_pieces_coords = player.pieces.get_current_position
+
+        opponent = self.__players[1] if self.__action_player == self.__players[0] else self.__players[0]
+
+        for piece in opponent.pieces:
+                # Falta descobrir como � que nao vou meter peças a passar por cima umas das outras
+                current_pos = piece.get_current_pos()
 
 
 
