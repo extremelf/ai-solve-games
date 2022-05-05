@@ -18,6 +18,10 @@ class BarcaPiece:
         self.__current_pos = new_pos
 
     @abstractmethod
+    def get_piece_periferics(self):
+        pass
+
+    @abstractmethod
     def initialize_positions(self, x, y):
         pass
 

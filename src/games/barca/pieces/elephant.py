@@ -37,3 +37,17 @@ class Elephant(BarcaPiece):
 
     def get_current_pos(self) -> list[int]:
         return [self.positionx, self.positiony]
+
+    def get_piece_periferics(self)->list[int]:
+
+        position_ur = [(self.positionx - 1, self.positiony + 1) if 0<= self.positionx -1<10
+                                                                   and 0 <= self.positiony -1 < 10]
+        position_ul =
+        position_u =
+        position_d =
+        position_dr =
+        position_dl =
+        position_l =
+        position_r =
+
+
