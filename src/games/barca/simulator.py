@@ -6,6 +6,8 @@ from games.game_simulator import GameSimulator
 from games.barca.player import BarcaPlayer
 from games.barca.state import BarcaState
 from games.barca.pieces.elephant import Elephant
+from games.barca.pieces.lion import Lion
+from games.barca.pieces.mouse import Mouse
 
 
 class BarcaSimulator(GameSimulator, ABC):
@@ -24,24 +26,24 @@ class BarcaSimulator(GameSimulator, ABC):
         elephants = [piece for piece in player.pieces if isinstance(piece, Elephant)]
         lions = [piece for piece in player.pieces if isinstance(piece, Lion)]
         mice = [piece for piece in player.pieces if isinstance(piece, Mouse)]
-
+        print(elephants)
         for piece in range(len(elephants)):
-            if piece == 1:
+            if piece == 0:
                 elephants[piece].initialize_positions(5, (5 + (multiplier * (offset + 4))))
             else:
                 elephants[piece].initialize_positions(6, (5 + (multiplier * (offset + 4))))
         for piece in range(len(lions)):
-            if piece == 1:
+            if piece == 0:
                 lions[piece].initialize_positions(4, (5 + (multiplier * (offset + 3))))
             else:
                 lions[piece].initialize_positions(7, (5 + (multiplier * (offset + 3))))
         for piece in range(len(mice)):
-            if piece == 1:
+            if piece == 0:
                 mice[piece].initialize_positions(5, (5 + (multiplier * (offset + 3))))
             else:
                 mice[piece].initialize_positions(6, (5 + (multiplier * (offset + 3))))
 
-    def init_games(self):
+    def init_game(self):
         return BarcaState(self.__num_rows, self.__num_cols, self.__players)
 
     def before_end_game(self, state: BarcaState):
@@ -49,3 +51,6 @@ class BarcaSimulator(GameSimulator, ABC):
 
     def end_game(self, state: BarcaState):
         pass
+
+
+

@@ -12,6 +12,7 @@ from games.poker.players.cfr import CFRKuhnPokerPlayer
 from games.poker.players.random import RandomKuhnPokerPlayer
 from games.poker.simulator import KuhnPokerSimulator
 from games.barca.simulator import BarcaSimulator
+from games.barca.players.HumanBarcaPlayer import HumanBarcaPLayer
 
 
 def run_simulation(desc: str, simulator: GameSimulator, iterations: int):
@@ -129,7 +130,7 @@ def main():
     # for sim in poker_simulations:
     #   run_simulation(sim["name"], KuhnPokerSimulator(sim["player1"], sim["player2"]), num_iterations)
 
-    run_simulation("teste", BarcaSimulator)
+    run_simulation("teste", BarcaSimulator(HumanBarcaPLayer("José"), HumanBarcaPLayer("Joaquim")), 1)
 
 
 if __name__ == "__main__":
