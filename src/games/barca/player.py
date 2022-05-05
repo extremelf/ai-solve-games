@@ -3,13 +3,16 @@ from abc import ABC
 from games.player import Player
 from games.barca.result import BarcaResult
 from games.barca.pieces.elephant import Elephant
+from games.barca.pieces.lion import Lion
+from games.barca.pieces.mouse import Mouse
 
 
 class BarcaPlayer(Player, ABC):
 
     def __init__(self, name):
         super().__init__(name)
-        self.pieces = [Elephant("elephant"), Elephant("elephant")]
+        self.pieces = [Elephant("elephant"), Elephant("elephant"), Lion("lion"), Lion("lion"), Mouse("mouse"),
+                       Mouse("mouse")]
 
         self.__stats = {}
         for bres in BarcaResult:

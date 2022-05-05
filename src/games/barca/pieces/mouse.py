@@ -10,18 +10,21 @@ class Mouse(BarcaPiece):
         super().__init__(name)
 
     def initialize_positions(self, x, y):
-        if self.position_x and self.position_y is None:
+        if self.position_x is None and self.position_y is None:
             self.position_x = x
             self.position_y = y
 
     def possible_moves(self):
-        u = [(self.position_y - i, self.position_x) for i in range(1, 10) if 0 <= self.position_y < 10 and
+        u = [(self.position_y - i, self.position_x) for i in range(1, 10) if 0 <= self.position_y - i < 10 and
              0 <= self.position_x < 10]
-        d = [(self.position_y + i, self.position_x) for i in range(1, 10) if 0 <= self.position_y < 10 and
+        d = [(self.position_y + i, self.position_x) for i in range(1, 10) if 0 <= self.position_y + i < 10 and
              0 <= self.position_x < 10]
         l = [(self.position_y, self.position_x - i) for i in range(1, 10) if 0 <= self.position_y < 10 and
-             0 <= self.position_x < 10]
+             0 <= self.position_x - i < 10]
         r = [(self.position_y, self.position_x + i) for i in range(1, 10) if 0 <= self.position_y < 10 and
-             0 <= self.position_x < 10]
+             0 <= self.position_x + i < 10]
 
         return u + d + l + r
+
+    def get_current_pos(self):
+        return [self.position_x, self.position_y]

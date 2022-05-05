@@ -1,4 +1,4 @@
-from piece import BarcaPiece
+from games.barca.piece import BarcaPiece
 
 
 class BarcaAction:
