@@ -14,8 +14,9 @@ class BarcaPiece:
     def get_current_pos(self):
         pass
 
-    def set_current_pos(self, new_pos):
-        self.__current_pos = new_pos
+    @abstractmethod
+    def set_current_pos(self, posx, posy):
+        pass
 
     @abstractmethod
     def initialize_positions(self, x, y):

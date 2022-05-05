@@ -27,3 +27,7 @@ class Lion(BarcaPiece):
 
     def get_current_pos(self):
         return [self.positionx, self.positiony]
+
+    def set_current_pos(self, posx, posy):
+        self.positionx = posx
+        self.positiony = posy

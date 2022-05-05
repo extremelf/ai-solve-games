@@ -28,3 +28,7 @@ class Mouse(BarcaPiece):
 
     def get_current_pos(self):
         return [self.position_x, self.position_y]
+
+    def set_current_pos(self, posx, posy):
+        self.position_x = posx
+        self.position_y = posy

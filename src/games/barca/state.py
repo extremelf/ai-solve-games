@@ -34,7 +34,7 @@ class BarcaState(State):
         return self.__acting_player
 
     def __check_winner(self):
-        return True
+        return False
 
     def update(self, action: BarcaAction):
         piece = action.get_piece()
@@ -67,8 +67,7 @@ class BarcaState(State):
     def display_grid(self, grid):
 
         self.__displayer_separator()
-        self.__displayer_numbers()
-
+        self.__display_numbers()
         for row in range(0, self.__num_rows):
             print(row, end="")
             print("|", end="")
@@ -77,13 +76,9 @@ class BarcaState(State):
                 print("|", end="")
             print("")
             self.__displayer_separator()
-        self.__displayer_numbers()
+
+        self.__display_numbers()
         print("")
-        #for pos in range(len(grid)):
-         #   if pos % 10 == 9:
-          #      print(f' {grid[pos]}', end="\n")
-           # else:
-            #    print(f' {grid[pos]}', end=" ")
 
     def __displayer_cell(self, row, col):
         print({
@@ -98,11 +93,11 @@ class BarcaState(State):
             print("----", end="")
         print("---")
 
-    def __displayer_numbers(self):
+    def __display_numbers(self):
         for col in range(0, self.__num_cols):
             if col < 10:
-                print(' ', end="")
-            print(f' {col} ', end="")
+                print('  ', end="")
+            print(f' {col}', end="")
         print("")
 
     def get_opponent_cords(self, player):
@@ -120,6 +115,13 @@ class BarcaState(State):
 
         return moves
 
+    def display_acting_player_pieces(self):
+        player = self.__players[self.__acting_player]
+        for index in range(len(player.pieces)):
+            piece = player.pieces[index]
+            piece_pos = piece.get_current_pos()
+            print(f'{index}: {piece.get_name()} ({piece_pos[0]}, {piece_pos[1]})')
+
     def before_results(self):
         pass
 
@@ -133,4 +135,4 @@ class BarcaState(State):
         pass
 
     def validate_action(self, action) -> bool:
-        pass
+        return True
