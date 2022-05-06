@@ -64,16 +64,21 @@ class BarcaState(State):
 
         self.display_grid(grid)
 
-    def get_opponent_cords(self):
-        # opponent_pieces_coords = player.pieces.get_current_position
-
-        opponent = self.__players[1] if self.__action_player == 0 else self.__players[0]
-
-        opponent_cords = []
-        for piece in opponent.pieces:
-            current_pos = piece.get_current_pos()
-            opponent_cords.__add__(current_pos)
-        return opponent_cords
+    #
+    # def get_opponent_cords(self):
+    #     """
+    #     NOT NECESSARY
+    #     """
+    #
+    #     # opponent_pieces_coords = player.pieces.get_current_position
+    #
+    #     opponent = self.__players[1] if self.__action_player == 0 else self.__players[0]
+    #
+    #     opponent_cords = []
+    #     for piece in opponent.pieces:
+    #         current_pos = piece.get_current_pos()
+    #         opponent_cords.__add__(current_pos)
+    #     return opponent_cords
 
     def is_in_fear(self):
 
@@ -82,8 +87,19 @@ class BarcaState(State):
 
         for pieces in self.__acting_player:
             current_pos = pieces.get_current_pos()
-            current_pos = [self.position]
+            for pieces_opo in opponent.pieces:
+                current_pos_oppo = pieces_opo.get_current_pos()
+                if isinstance(pieces, Elephant) and isinstance(pieces_opo, Mouse) \
+                        and current_pos == pieces_opo.get_piece_periferics():
+                    legal_moves = pieces.possible_moves()
+                elif isinstance(pieces, Lion) and isinstance(pieces_opo, Elephant) \
+                        and current_pos == pieces_opo.get_piece_periferics():
+                    legal_moves = pieces.possible_moves()
+                elif isinstance(pieces, Mouse) and isinstance(pieces_opo, Lion) \
+                        and current_pos == pieces_opo.get_piece_periferics():
+                    legal_moves = pieces.possible_moves()
 
+        return legal_moves
         #
         # if self.__acting_player.pieces[Elephant].get_current_pos() == (opponent.pieces[Mouse].get_current_pos()+1):
         #     legal_moves = self.__acting_player.pieces[Elephant].possible_moves()
@@ -139,9 +155,8 @@ class BarcaState(State):
             current_pos = piece.get_current_pos()
             opponent_cords.__add__(current_pos)
             for opponent_cords in all_moves:
-                if opponent_cords in all_moves:
-                    all_moves.remove(opponent_cords)
-                    legal_moves = all_moves
+                if opponent_cords not in all_moves:
+                    legal_moves.__add__(opponent_cords)
         return legal_moves
 
     def display_acting_player_pieces(self):

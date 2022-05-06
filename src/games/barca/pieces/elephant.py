@@ -55,8 +55,10 @@ class Elephant(BarcaPiece):
                       and 0 <= self.positiony - 1 < 10]
         position_r = [(self.positionx, self.positiony + 1) for 1 in range(1) if 0 <= self.positionx - 1 < 10
                       and 0 <= self.positiony - 1 < 10]
+        position = [(self.positionx, self.positiony) for 1 in range(1) if 0 <= self.positionx - 1 < 10
+                    and 0 <= self.positiony - 1 < 10]
 
-        return position_r + position_l + position_dl + position_dr + position_d + position_ur + position_u + position_ul
+        return position + position_r + position_l + position_dl + position_dr + position_d + position_ur + position_u + position_ul
 
     def set_current_pos(self, posx, posy):
         self.positionx = posx
