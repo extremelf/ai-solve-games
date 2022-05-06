@@ -22,6 +22,15 @@ class HumanBarcaPLayer(BarcaPlayer):
             piece_pos_y = int(input(f'Player{state.get_acting_player()}, choose a y position:'))
             while piece_pos_y not in range(0, 9):
                 piece_pos_y = int(input(f'Invalid position, choose a position:'))
+            possible_moves = self.pieces[piece_index].possible_moves()
+            while [piece_pos_y, piece_pos_x] not in possible_moves:
+                print("Invalid move")
+                piece_pos_x = int(input(f'Player{state.get_acting_player()}, choose a x position:'))
+                while piece_pos_x not in range(0, 9):
+                    piece_pos_x = int(input(f'Invalid position, choose a position:'))
+                piece_pos_y = int(input(f'Player{state.get_acting_player()}, choose a y position:'))
+                while piece_pos_y not in range(0, 9):
+                    piece_pos_y = int(input(f'Invalid position, choose a position:'))
 
             try:
                 return BarcaAction(self.pieces[piece_index], piece_pos_x, piece_pos_y)

@@ -15,13 +15,13 @@ class Mouse(BarcaPiece):
             self.position_y = y
 
     def possible_moves(self):
-        u = [(self.position_y - i, self.position_x) for i in range(1, 10) if 0 <= self.position_y - i < 10 and
+        u = [[self.position_y - i, self.position_x] for i in range(1, 10) if 0 <= self.position_y - i < 10 and
              0 <= self.position_x < 10]
-        d = [(self.position_y + i, self.position_x) for i in range(1, 10) if 0 <= self.position_y + i < 10 and
+        d = [[self.position_y + i, self.position_x] for i in range(1, 10) if 0 <= self.position_y + i < 10 and
              0 <= self.position_x < 10]
-        l = [(self.position_y, self.position_x - i) for i in range(1, 10) if 0 <= self.position_y < 10 and
+        l = [[self.position_y, self.position_x - i] for i in range(1, 10) if 0 <= self.position_y < 10 and
              0 <= self.position_x - i < 10]
-        r = [(self.position_y, self.position_x + i) for i in range(1, 10) if 0 <= self.position_y < 10 and
+        r = [[self.position_y, self.position_x + i] for i in range(1, 10) if 0 <= self.position_y < 10 and
              0 <= self.position_x + i < 10]
 
         return u + d + l + r
