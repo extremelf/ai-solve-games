@@ -10,10 +10,15 @@ class HumanBarcaPLayer(BarcaPlayer):
 
     def get_action(self, state: BarcaState):
         state.display()
+        print("Pieces: ")
+        state.display_acting_player_pieces()
         while True:
-            # noinspection PyBroadException
+            piece_index = int(input(f'Player{state.get_acting_player()}, choose a piece:'))
+            while piece_index not in range(0, len(self.pieces)):
+                piece_index = int(input(f'Invalid piece, choose a piece:'))
+
             try:
-                return BarcaAction(int(input(f"Player {state.get_acting_player()}, choose a column: ")))
+                return BarcaAction(self.pieces[piece_index], 3, 4)
             except Exception:
                 continue
 
