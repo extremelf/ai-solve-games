@@ -1,5 +1,7 @@
 from abc import ABC
 
+from games.barca.pieces.lion import Lion
+from games.barca.pieces.mouse import Mouse
 from games.game_simulator import GameSimulator
 from games.barca.player import BarcaPlayer
 from games.barca.state import BarcaState

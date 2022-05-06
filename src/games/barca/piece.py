@@ -19,9 +19,14 @@ class BarcaPiece:
         pass
 
     @abstractmethod
+    def get_piece_periferics(self):
+        pass
+
+    @abstractmethod
     def initialize_positions(self, x, y):
         pass
 
     @abstractmethod
     def possible_moves(self):
         pass
+

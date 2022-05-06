@@ -71,7 +71,36 @@ class BarcaState(State):
                 elif isinstance(piece, Mouse):
                     grid[current_pos[1]][current_pos[0]] = 4
 
+
         self.display_grid(grid)
+
+    def get_opponent_cords(self):
+        # opponent_pieces_coords = player.pieces.get_current_position
+
+        opponent = self.__players[1] if self.__action_player == 0 else self.__players[0]
+
+        opponent_cords = []
+        for piece in opponent.pieces:
+            current_pos = piece.get_current_pos()
+            opponent_cords.__add__(current_pos)
+        return opponent_cords
+
+    def is_in_fear(self):
+
+        # Need to check how will it be arround it
+        opponent = self.__players[1] if self.__action_player == 0 else self.__players[0]
+
+        for pieces in self.__acting_player:
+            current_pos = pieces.get_current_pos()
+            current_pos = [self.position]
+
+        #
+        # if self.__acting_player.pieces[Elephant].get_current_pos() == (opponent.pieces[Mouse].get_current_pos()+1):
+        #     legal_moves = self.__acting_player.pieces[Elephant].possible_moves()
+        # elif self.__acting_player.pieces[Lion].get_current_pos() == (opponent.pieces[Elephant].get_current_pos()+1):
+        #     legal_moves = self.__acting_player.pieces[Lion].possible_moves()
+        # elif self.__acting_player.pieces[Mouse].get_current_pos() == (opponent.pieces[Lion].get_current_pos() + 1):
+        #     legal_moves = self.__acting_player.pieces[Mouse].possible_moves()
 
     def display_grid(self, grid):
 
@@ -109,20 +138,21 @@ class BarcaState(State):
             print(f' {col}', end="")
         print("")
 
-    def get_opponent_cords(self, player):
-        opponent_pieces_coords = player.pieces.get_current_position
+    def get_legal_moves(self, piece):
 
-    def get_legal_moves(self, piece, opponent_pieces_coords):
+        all_moves = piece.possible_moves()
 
-        all_moves = piece.possible_moves
-
-        ilegal_coords = opponent_pieces_coords
-
-        for moves in all_moves:
-            if moves in ilegal_coords:
-                all_moves.remove(moves)
-
-        return moves
+        opponent = self.__players[1] if self.__action_player == 0 else self.__players[0]
+        legal_moves = []
+        opponent_cords = []
+        for piece in opponent.pieces:
+            current_pos = piece.get_current_pos()
+            opponent_cords.__add__(current_pos)
+            for opponent_cords in all_moves:
+                if opponent_cords in all_moves:
+                    all_moves.remove(opponent_cords)
+                    legal_moves = all_moves
+        return legal_moves
 
     def display_acting_player_pieces(self):
         player = self.__players[1 if self.__acting_player == 0 else 0]
