@@ -38,6 +38,26 @@ class Elephant(BarcaPiece):
     def get_current_pos(self) -> list[int]:
         return [self.positionx, self.positiony]
 
+    def get_piece_periferics(self) -> list[int]:
+        position_ur = [(self.positionx - 1, self.positiony + 1) for 1 in range(1) if 0 <= self.positionx - 1 < 10
+                       and 0 <= self.positiony - 1 < 10]
+        position_ul = [(self.positionx - 1, self.positiony + 1) for 1 in range(1) if 0 <= self.positionx - 1 < 10
+                       and 0 <= self.positiony - 1 < 10]
+        position_u = [(self.positionx - 1, self.positiony) for 1 in range(1) if 0 <= self.positionx - 1 < 10
+                      and 0 <= self.positiony - 1 < 10]
+        position_d = [(self.positionx + 1, self.positiony) for 1 in range(1) if 0 <= self.positionx - 1 < 10
+                      and 0 <= self.positiony - 1 < 10]
+        position_dr = [(self.positionx + 1, self.positiony + 1) for 1 in range(1) if 0 <= self.positionx - 1 < 10
+                       and 0 <= self.positiony - 1 < 10]
+        position_dl = [(self.positionx - 1, self.positiony - 1) for 1 in range(1) if 0 <= self.positionx - 1 < 10
+                       and 0 <= self.positiony - 1 < 10]
+        position_l = [(self.positionx, self.positiony - 1) for 1 in range(1) if 0 <= self.positionx - 1 < 10
+                      and 0 <= self.positiony - 1 < 10]
+        position_r = [(self.positionx, self.positiony + 1) for 1 in range(1) if 0 <= self.positionx - 1 < 10
+                      and 0 <= self.positiony - 1 < 10]
+
+        return position_r + position_l + position_dl + position_dr + position_d + position_ur + position_u + position_ul
+
     def set_current_pos(self, posx, posy):
         self.positionx = posx
         self.positiony = posy

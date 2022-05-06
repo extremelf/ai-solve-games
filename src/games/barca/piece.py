@@ -29,3 +29,4 @@ class BarcaPiece:
     @abstractmethod
     def possible_moves(self):
         pass
+
