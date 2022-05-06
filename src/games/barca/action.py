@@ -8,8 +8,8 @@ class BarcaAction:
 
     def __init__(self, piece: BarcaPiece, positionx: int, positiony: int):
         self.__piece = piece
-        self.__positiony = positionx
-        self.__positionx = positiony
+        self.__positionx = positionx
+        self.__positiony = positiony
 
     def get_position(self):
         return [self.__positionx, self.__positiony]

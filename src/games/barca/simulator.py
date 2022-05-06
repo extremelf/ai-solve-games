@@ -27,19 +27,19 @@ class BarcaSimulator(GameSimulator, ABC):
         print(elephants)
         for piece in range(len(elephants)):
             if piece == 0:
-                elephants[piece].initialize_positions(5, (5 + (multiplier * (offset + 4))))
+                elephants[piece].initialize_positions(4, (5 + (multiplier * (offset + 4))))
             else:
-                elephants[piece].initialize_positions(6, (5 + (multiplier * (offset + 4))))
+                elephants[piece].initialize_positions(5, (5 + (multiplier * (offset + 4))))
         for piece in range(len(lions)):
             if piece == 0:
-                lions[piece].initialize_positions(4, (5 + (multiplier * (offset + 3))))
+                lions[piece].initialize_positions(3, (5 + (multiplier * (offset + 3))))
             else:
-                lions[piece].initialize_positions(7, (5 + (multiplier * (offset + 3))))
+                lions[piece].initialize_positions(6, (5 + (multiplier * (offset + 3))))
         for piece in range(len(mice)):
             if piece == 0:
-                mice[piece].initialize_positions(5, (5 + (multiplier * (offset + 3))))
+                mice[piece].initialize_positions(4, (5 + (multiplier * (offset + 3))))
             else:
-                mice[piece].initialize_positions(6, (5 + (multiplier * (offset + 3))))
+                mice[piece].initialize_positions(5, (5 + (multiplier * (offset + 3))))
 
     def init_game(self):
         return BarcaState(self.__num_rows, self.__num_cols, self.__players)
