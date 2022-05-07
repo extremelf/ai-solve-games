@@ -162,7 +162,7 @@ class BarcaState(State):
                 #ve as peças em campo de ambos os jogadores e se as encontrar essas peças
                 #para de percorrer o a grid, assim sabe que so pode ir at� la
                 for pieces in self.__players:
-                    #ver se os moves possiveis n�o irao passar por cima de nunha das outras peças em campo
+                    #ver se os moves possiveis n�o irao passar por cima de nenhuma das outras peças em campo
                     if pieces.possible_moves() in self.__players.pieces.get_current_pos():
                         break
         more_legal_moves.__add__(pieces)
