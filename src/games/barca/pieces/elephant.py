@@ -15,22 +15,22 @@ class Elephant(BarcaPiece):
             self.positiony = y
 
     def possible_moves(self):
-        ur = [(self.positiony - i, self.positionx + i) for i in range(1, 10) if
+        ur = [[self.positiony - i, self.positionx + i] for i in range(1, 10) if
               0 <= self.positionx + i < 10 and 0 <= self.positiony - i < 10]
-        ul = [(self.positiony - i, self.positionx - i) for i in range(1, 10) if
+        ul = [[self.positiony - i, self.positionx - i] for i in range(1, 10) if
               0 <= self.positionx - i < 10 and 0 <= self.positiony - i < 10]
-        dr = [(self.positiony + i, self.positionx + i) for i in range(1, 10) if
+        dr = [[self.positiony + i, self.positionx + i] for i in range(1, 10) if
               0 <= self.positionx + i < 10 and 0 <= self.positiony + i < 10]
-        dl = [(self.positiony + i, self.positionx - i) for i in range(1, 10) if
+        dl = [[self.positiony + i, self.positionx - i] for i in range(1, 10) if
               0 <= self.positionx - i < 10 and 0 <= self.positiony + i < 10]
 
-        u = [(self.positiony - i, self.positionx) for i in range(1, 10) if
+        u = [[self.positiony - i, self.positionx] for i in range(1, 10) if
              0 <= self.positionx < 10 and 0 <= self.positiony - i < 10]
-        d = [(self.positiony + i, self.positionx) for i in range(1, 10) if
+        d = [[self.positiony + i, self.positionx] for i in range(1, 10) if
              0 <= self.positionx < 10 and 0 <= self.positiony + i < 10]
-        l = [(self.positiony, self.positionx - i) for i in range(1, 10) if
+        l = [[self.positiony, self.positionx - i] for i in range(1, 10) if
              0 <= self.positionx - i < 10 and 0 <= self.positiony < 10]
-        r = [(self.positiony, self.positionx + i) for i in range(1, 10) if
+        r = [[self.positiony, self.positionx + i] for i in range(1, 10) if
              0 <= self.positionx + i < 10 and 0 <= self.positiony < 10]
 
         return ur + ul + dr + dl + u + d + l + r

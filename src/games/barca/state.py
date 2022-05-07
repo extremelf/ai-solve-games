@@ -1,3 +1,4 @@
+from games.barca.result import BarcaResult
 from games.state import State
 from games.barca.player import BarcaPlayer
 from games.barca.action import BarcaAction
@@ -34,6 +35,14 @@ class BarcaState(State):
         return self.__acting_player
 
     def __check_winner(self):
+        occupied_holes = 0
+        holes_pos = [[3, 3], [3, 6], [6, 3], [6, 6]]
+        for piece in self.__players[1 if self.__acting_player == 0 else 0].pieces:
+            pos = piece.get_current_pos()
+            if [pos[1], pos[0]] in holes_pos:
+                occupied_holes += 1
+        if occupied_holes >= 3:
+            return True
         return False
 
     def update(self, action: BarcaAction):
@@ -56,11 +65,12 @@ class BarcaState(State):
             for piece in player.pieces:
                 current_pos = piece.get_current_pos()
                 if isinstance(piece, Elephant):
-                    grid[current_pos[1]][current_pos[0] - 1] = 2
+                    grid[current_pos[1]][current_pos[0]] = 2
                 elif isinstance(piece, Lion):
-                    grid[current_pos[1]][current_pos[0] - 1] = 3
+                    grid[current_pos[1]][current_pos[0]] = 3
                 elif isinstance(piece, Mouse):
-                    grid[current_pos[1]][current_pos[0] - 1] = 4
+                    grid[current_pos[1]][current_pos[0]] = 4
+
 
         self.display_grid(grid)
 
@@ -173,7 +183,7 @@ class BarcaState(State):
         return legal_moves
 
     def display_acting_player_pieces(self):
-        player = self.__players[self.__acting_player]
+        player = self.__players[1 if self.__acting_player == 0 else 0]
         for index in range(len(player.pieces)):
             piece = player.pieces[index]
             piece_pos = piece.get_current_pos()
@@ -186,10 +196,12 @@ class BarcaState(State):
         pass
 
     def get_result(self, pos):
-        pass
+        if self.__has_winner:
+            return BarcaResult.LOSE if pos == self.__acting_player else BarcaResult.WIN
+        return None
 
     def is_finished(self) -> bool:
-        pass
+        return self.__has_winner
 
     def validate_action(self, action) -> bool:
         return True
