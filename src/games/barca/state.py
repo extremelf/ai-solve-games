@@ -144,6 +144,19 @@ class BarcaState(State):
             print(f' {col}', end="")
         print("")
 
+    def dont_pass_over_pieces(self):
+        more_legal_moves = []
+        # percorre as linhas e colunas
+        for row in range(self.__num_rows):
+            for cols in range(self.__num_cols):
+                #ve as peças em campo de ambos os jogadores e se as encontrar essas peças
+                #para de percorrer o a grid, assim sabe que so pode ir at� la
+                for pieces in self.__players:
+                    #ver se os moves possiveis n�o irao passar por cima de nunha das outras peças em campo
+                    if pieces.possible_moves() in self.__players.pieces.get_current_pos():
+                        break
+        more_legal_moves.__add__(pieces)
+
     def get_legal_moves(self, piece):
 
         all_moves = piece.possible_moves()
