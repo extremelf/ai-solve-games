@@ -1,3 +1,4 @@
+from games.barca.piece import BarcaPiece
 from games.barca.result import BarcaResult
 from games.state import State
 from games.barca.player import BarcaPlayer
@@ -71,42 +72,33 @@ class BarcaState(State):
                 elif isinstance(piece, Mouse):
                     grid[current_pos[1]][current_pos[0]] = 4
 
-
         self.display_grid(grid)
 
-    #TODO verificar se o movimento gera perigo para a peça
+    # TODO verificar se o movimento gera perigo para a peça
     # Retorna se o movimento coloca perigo
 
-    def is_in_fear(self, pieceType):
-        #TODO verificar periferia da peça atual e verificar se existe algum oponente nessas coordenadas retorna true or
-        # com base se está em perigo
-        # novos argumentos, lista das perifierias e o tipo de peça que é
+    def get_periferics(self, x, y) -> list[list]:
+        position_ur = [[x - i, y + i] for i in range(1) if 0 <= x - i < 10
+                       and 0 <= y - i < 10]
+        position_ul = [[x - i, y + i] for i in range(1) if 0 <= x - i < 10
+                       and 0 <= y - i < 10]
+        position_u = [[x - i, y] for i in range(1) if 0 <= x - i < 10
+                      and 0 <= y - i < 10]
+        position_d = [[x + i, y] for i in range(1) if 0 <= x - i < 10
+                      and 0 <= y - i < 10]
+        position_dr = [[x + i, y + i] for i in range(1) if 0 <= x - i < 10
+                       and 0 <= y - i < 10]
+        position_dl = [[x - i, y - i] for i in range(1) if 0 <= x - i < 10
+                       and 0 <= y - i < 10]
+        position_l = [[x, y - i] for i in range(1) if 0 <= x - i < 10
+                      and 0 <= y - i < 10]
+        position_r = [[x, y + i] for i in range(1) if 0 <= x - i < 10
+                      and 0 <= y - i < 10]
+        position = [[x, y] for i in range(1) if 0 <= x - i < 10
+                    and 0 <= y - i < 10]
 
-        # Need to check how will it be arround it
-        opponent = self.__players[self.__acting_player]
-        acting_player = self.__players[1] if self.__acting_player == 0 else self.__players[0]
-        for pieces in acting_player.pieces:
-            current_pos = pieces.get_current_pos()
-            for pieces_opo in opponent.pieces:
-                current_pos_oppo = pieces_opo.get_current_pos()
-                if isinstance(pieces, Elephant) and isinstance(pieces_opo, Mouse) \
-                        and current_pos == pieces_opo.get_piece_periferics():
-                    legal_moves = pieces.possible_moves()
-                elif isinstance(pieces, Lion) and isinstance(pieces_opo, Elephant) \
-                        and current_pos == pieces_opo.get_piece_periferics():
-                    legal_moves = pieces.possible_moves()
-                elif isinstance(pieces, Mouse) and isinstance(pieces_opo, Lion) \
-                        and current_pos == pieces_opo.get_piece_periferics():
-                    legal_moves = pieces.possible_moves()
-
-        return legal_moves
-        #
-        # if self.__acting_player.pieces[Elephant].get_current_pos() == (opponent.pieces[Mouse].get_current_pos()+1):
-        #     legal_moves = self.__acting_player.pieces[Elephant].possible_moves()
-        # elif self.__acting_player.pieces[Lion].get_current_pos() == (opponent.pieces[Elephant].get_current_pos()+1):
-        #     legal_moves = self.__acting_player.pieces[Lion].possible_moves()
-        # elif self.__acting_player.pieces[Mouse].get_current_pos() == (opponent.pieces[Lion].get_current_pos() + 1):
-        #     legal_moves = self.__acting_player.pieces[Mouse].possible_moves()
+        return position + position_r + position_l + position_dl + position_dr \
+               + position_d + position_ur + position_u + position_ul
 
     def display_grid(self, grid):
 
@@ -149,29 +141,71 @@ class BarcaState(State):
         # percorre as linhas e colunas
         for row in range(self.__num_rows):
             for cols in range(self.__num_cols):
-                #ve as peças em campo de ambos os jogadores e se as encontrar essas peças
-                #para de percorrer o a grid, assim sabe que so pode ir at� la
+                # ve as peças em campo de ambos os jogadores e se as encontrar essas peças
+                # para de percorrer o a grid, assim sabe que so pode ir at� la
                 for pieces in self.__players:
-                    #ver se os moves possiveis n�o irao passar por cima de nenhuma das outras peças em campo
+                    # ver se os moves possiveis n�o irao passar por cima de nenhuma das outras peças em campo
                     if pieces.possible_moves() in self.__players.pieces.get_current_pos():
                         break
         more_legal_moves.__add__(pieces)
 
-    def get_legal_moves(self, piece):
+    def is_in_fear(self, piece_type, periferics):
+        # TODO verificar periferia da peça atual e verificar se existe perigo e se ira ficar em perigo
+        # algum oponente nessas coordenadas retorna true or false caso exista um destes tipos a acontecer
+        # com base se está em perigo
+        # novos argumentos, lista das perifierias e o tipo de peça que é
 
-        all_moves = piece.possible_moves()
-        #verificar se as peças estão in fear ex do resultado {0:{true}, 1:{False},...}
-        # next step caso existe pelo menos 1 True remove todos os falsos e irá apenas verificar jogadas válidas para este
+        # Need to check how will it be around it
+        opponent = self.__players[self.__acting_player]
+
+        for pieces_opo in opponent.pieces:
+            current_pos_oppo = pieces_opo.get_current_pos()
+            if current_pos_oppo in periferics:
+                if isinstance(piece_type, Elephant):
+                    if isinstance(pieces_opo, Mouse):
+                        return True
+                if isinstance(piece_type, Mouse):
+                    if isinstance(pieces_opo, Lion):
+                        return True
+                if isinstance(piece_type, Lion):
+                    if isinstance(pieces_opo, Elephant):
+                        return True
+
+        return False
+
+    def get_legal_moves(self):
+
+        # verificar se as peças estão in fear ex do resultado {0:{true}, 1:{False},...}
+        # next step caso existe pelo menos 1 True remove todos os falsos e irá apenas verificar jogadas
+        # válidas para este
         # array resultante
 
-        #ciclo for deste novo array e para cada possible move da peça atual verifica se não vai ficar em medo, chamando
+        # ciclo for deste novo array e para cada possible move da peça atual verifica se não vai ficar em medo,
+        # chamando
         # a nova função que retornará um True or false, com base neste return, mantém a peça nos possible moves ou remove
+        pieces_fear = {
 
+        }
 
-        opponent = self.__players[1] if self.__acting_player == 0 else self.__players[0]
+        acting_player = self.__players[1] if self.__acting_player == 0 else self.__players[0]
         legal_moves = []
         opponent_cords = []
-        for piece in opponent.pieces:
+
+        # population dictionarie with the index and respective values
+        for piece_index in range(0, len(acting_player.pieces)):
+            piece = acting_player.pieces[piece_index]
+            pieces_fear[piece_index] = self.is_in_fear(piece.get_piece_type(), piece.get_piece_periferics())
+
+            # remove those with false as a value
+            for index in pieces_fear.values():
+                if not index:
+                    pieces_fear.clear(index)
+
+            """
+            Now there needs to be an array "generated" by the Updated dictionary of pieces_ fear
+            with the coordinates of those pieces, BUT in this dict we dont store that right?
+            """
+
             current_pos = piece.get_current_pos()
             opponent_cords.__add__(current_pos)
             for opponent_cords in all_moves:

@@ -4,6 +4,7 @@ from games.barca.piece import BarcaPiece
 class Elephant(BarcaPiece):
     positionx = None
     positiony = None
+    piece_type = 'Elephant'
     moves = list()
 
     def __init__(self, name):
@@ -13,6 +14,9 @@ class Elephant(BarcaPiece):
         if self.positionx is None and self.positiony is None:
             self.positionx = x
             self.positiony = y
+
+    def get_piece_type(self):
+        return self.piece_type
 
     def possible_moves(self):
         ur = [[self.positiony - i, self.positionx + i] for i in range(1, 10) if
