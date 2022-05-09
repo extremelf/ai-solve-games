@@ -17,11 +17,11 @@ class Lion(BarcaPiece):
         ur = [[self.positiony - i, self.positionx + i] for i in range(1, 10) if
               0 <= self.positionx + i < 10 and 0 <= self.positiony - i < 10]
         ul = [[self.positiony - i, self.positionx - i] for i in range(1, 10) if
-              0 <= self.positionx < 10 and 0 <= self.positiony < 10]
+              0 <= self.positionx - i < 10 and 0 <= self.positiony - i < 10]
         dr = [[self.positiony + i, self.positionx + i] for i in range(1, 10) if
-              0 <= self.positionx < 10 and 0 <= self.positiony < 10]
+              0 <= self.positionx + i < 10 and 0 <= self.positiony + i < 10]
         dl = [[self.positiony + i, self.positionx - i] for i in range(1, 10) if
-              0 <= self.positionx  - i < 10 and 0 <= self.positiony + i < 10]
+              0 <= self.positionx - i < 10 and 0 <= self.positiony + i < 10]
 
         return ur + ul + dr + dl
 

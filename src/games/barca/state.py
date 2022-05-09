@@ -74,28 +74,18 @@ class BarcaState(State):
 
         self.display_grid(grid)
 
-    #
-    # def get_opponent_cords(self):
-    #     """
-    #     NOT NECESSARY
-    #     """
-    #
-    #     # opponent_pieces_coords = player.pieces.get_current_position
-    #
-    #     opponent = self.__players[1] if self.__action_player == 0 else self.__players[0]
-    #
-    #     opponent_cords = []
-    #     for piece in opponent.pieces:
-    #         current_pos = piece.get_current_pos()
-    #         opponent_cords.__add__(current_pos)
-    #     return opponent_cords
+    #TODO verificar se o movimento gera perigo para a peça
+    # Retorna se o movimento coloca perigo
 
-    def is_in_fear(self):
+    def is_in_fear(self, pieceType):
+        #TODO verificar periferia da peça atual e verificar se existe algum oponente nessas coordenadas retorna true or
+        # com base se está em perigo
+        # novos argumentos, lista das perifierias e o tipo de peça que é
 
         # Need to check how will it be arround it
-        opponent = self.__players[1] if self.__action_player == 0 else self.__players[0]
-
-        for pieces in self.__acting_player:
+        opponent = self.__players[self.__acting_player]
+        acting_player = self.__players[1] if self.__acting_player == 0 else self.__players[0]
+        for pieces in acting_player.pieces:
             current_pos = pieces.get_current_pos()
             for pieces_opo in opponent.pieces:
                 current_pos_oppo = pieces_opo.get_current_pos()
@@ -170,8 +160,15 @@ class BarcaState(State):
     def get_legal_moves(self, piece):
 
         all_moves = piece.possible_moves()
+        #verificar se as peças estão in fear ex do resultado {0:{true}, 1:{False},...}
+        # next step caso existe pelo menos 1 True remove todos os falsos e irá apenas verificar jogadas válidas para este
+        # array resultante
 
-        opponent = self.__players[1] if self.__action_player == 0 else self.__players[0]
+        #ciclo for deste novo array e para cada possible move da peça atual verifica se não vai ficar em medo, chamando
+        # a nova função que retornará um True or false, com base neste return, mantém a peça nos possible moves ou remove
+
+
+        opponent = self.__players[1] if self.__acting_player == 0 else self.__players[0]
         legal_moves = []
         opponent_cords = []
         for piece in opponent.pieces:
