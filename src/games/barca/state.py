@@ -197,14 +197,25 @@ class BarcaState(State):
             pieces_fear[piece_index] = self.is_in_fear(piece.get_piece_type(), piece.get_piece_periferics())
 
             # remove those with false as a value
-            for index in pieces_fear.values():
-                if not index:
-                    pieces_fear.clear(index)
+            for index in pieces_fear:
+                if pieces_fear[index]:
+                    pieces_fear = dict(filter(lambda value: value[1], pieces_fear.items()))
+
+            # TODO
+            # Not to step over the other
+
+            for index in pieces_fear:
+                piece = acting_player.pieces[index]
+                for move in piece.possible_moves():
+                    periferics = self.get_periferics(move[0], move[1])
+                    self.is_in_fear(piece.get_piece_type(), periferics)
 
             """
             Now there needs to be an array "generated" by the Updated dictionary of pieces_ fear
             with the coordinates of those pieces, BUT in this dict we dont store that right?
             """
+
+            new_array_of_moves = []
 
             current_pos = piece.get_current_pos()
             opponent_cords.__add__(current_pos)
