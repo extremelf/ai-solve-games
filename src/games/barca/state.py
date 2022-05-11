@@ -196,13 +196,19 @@ class BarcaState(State):
             piece = acting_player.pieces[piece_index]
             pieces_fear[piece_index] = self.is_in_fear(piece.get_piece_type(), piece.get_piece_periferics())
 
-            # remove those with false as a value
+            # remove those with false as a value if at least one is true
             for index in pieces_fear:
                 if pieces_fear[index]:
                     pieces_fear = dict(filter(lambda value: value[1], pieces_fear.items()))
 
             # TODO
             # Not to step over the other
+
+            for index1 in pieces_fear:
+                pieces_fear[index1] = piece.get_current_pos()
+                for moves in piece.possible_moves():
+                    if moves in pieces_fear[index1]:
+                        piece.get_current_pos()
 
             for index in pieces_fear:
                 piece = acting_player.pieces[index]
