@@ -13,6 +13,9 @@ class Mouse(BarcaPiece):
             self.position_x = x
             self.position_y = y
 
+    def get_piece_type(self):
+        return self.piece_type
+
     def possible_moves(self):
         u = [[self.position_y - i, self.position_x] for i in range(1, 10) if
              0 <= self.position_y - i < 10 and 0 <= self.position_x < 10]
@@ -31,3 +34,9 @@ class Mouse(BarcaPiece):
     def set_current_pos(self, posx, posy):
         self.position_x = posx
         self.position_y = posy
+
+    def set_legal_moves(self, moves):
+        self.__legal_moves = moves
+
+    def get_legal_moves(self):
+        return self.__legal_moves

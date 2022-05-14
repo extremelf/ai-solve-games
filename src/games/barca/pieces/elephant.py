@@ -5,7 +5,7 @@ class Elephant(BarcaPiece):
     positionx = None
     positiony = None
     piece_type = 'Elephant'
-    moves = list()
+    __legal_moves = list()
 
     def __init__(self, name):
         super().__init__(name)
@@ -37,7 +37,7 @@ class Elephant(BarcaPiece):
         r = [[self.positiony, self.positionx + i] for i in range(1, 10) if
              0 <= self.positionx + i < 10 and 0 <= self.positiony < 10]
 
-        return ur + ul + dr + dl + u + d + l + r
+        return {"ur": ur, "ul": ul, "dr": dr, "dl": dl, "u": u, "d": d, "l": l, "r": r}
 
     def get_current_pos(self) -> list[int]:
         return [self.positionx, self.positiony]
@@ -68,3 +68,9 @@ class Elephant(BarcaPiece):
     def set_current_pos(self, posx, posy):
         self.positionx = posx
         self.positiony = posy
+
+    def set_legal_moves(self, moves):
+        self.__legal_moves = moves
+
+    def get_legal_moves(self):
+        return self.__legal_moves

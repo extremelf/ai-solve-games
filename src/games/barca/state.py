@@ -136,19 +136,6 @@ class BarcaState(State):
             print(f' {col}', end="")
         print("")
 
-    def dont_pass_over_pieces(self):
-        more_legal_moves = []
-        # percorre as linhas e colunas
-        for row in range(self.__num_rows):
-            for cols in range(self.__num_cols):
-                # ve as peças em campo de ambos os jogadores e se as encontrar essas peças
-                # para de percorrer o a grid, assim sabe que so pode ir at� la
-                for pieces in self.__players:
-                    # ver se os moves possiveis n�o irao passar por cima de nenhuma das outras peças em campo
-                    if pieces.possible_moves() in self.__players.pieces.get_current_pos():
-                        break
-        more_legal_moves.__add__(pieces)
-
     def is_in_fear(self, piece_type, periferics):
         # TODO verificar periferia da peça atual e verificar se existe perigo e se ira ficar em perigo
         # algum oponente nessas coordenadas retorna true or false caso exista um destes tipos a acontecer
@@ -173,83 +160,115 @@ class BarcaState(State):
 
         return False
 
-    def get_legal_moves(self):
+    def step_above_others(self, piece):
 
-        # verificar se as peças estão in fear ex do resultado {0:{true}, 1:{False},...}
-        # next step caso existe pelo menos 1 True remove todos os falsos e irá apenas verificar jogadas
-        # válidas para este
-        # array resultante
+        player = self.__players[1] if self.__acting_player == 0 else self.__players[0]
+        opponent = self.__players[self.__acting_player]
+        all_pieces = player.pieces.get_current_pos() + opponent.pieces.get_current_pos()  # posiçao atual de todas as as peças no tabuleiro
+        possible_moves = piece.possible_moves()
+        for direction_index in possible_moves:
+            if possible_moves[direction_index] in all_pieces:
+                for move in possible_moves[direction_index]:
+                    if move in all_pieces:
+                        if direction_index == "ur":
+                            possible_moves[direction_index] = list(
+                                filter(lambda position: move[1] < position[0] < 10 and move[0] > position[1] >= 0,
+                                       possible_moves[direction_index]))
+                        if direction_index == "ul":
+                            possible_moves[direction_index] = list(
+                                filter(lambda position: move[1] > position[0] >= 0 and move[0] > position[1] >= 0,
+                                       possible_moves[direction_index]))
+                        if direction_index == "dr":
+                            possible_moves[direction_index] = list(
+                                filter(lambda position: move[1] < position[0] < 10 and move[0] < position[1] <= 9,
+                                       possible_moves[direction_index]))
+                        if direction_index == "dl":
+                            possible_moves[direction_index] = list(
+                                filter(lambda position: move[1] > position[0] >= 0 and move[0] > position[1] >= 0,
+                                       possible_moves[direction_index]))
+                        if direction_index == "u":
+                            possible_moves[direction_index] = list(
+                                filter(lambda position: move[0] > position[1] >= 0,
+                                       possible_moves[direction_index]))
+                        if direction_index == "d":
+                            possible_moves[direction_index] = list(
+                                filter(lambda position: move[0] < position[1] <= 9,
+                                       possible_moves[direction_index]))
+                        if direction_index == "r":
+                            possible_moves[direction_index] = list(
+                                filter(lambda position: move[1] < position[0] < 10,
+                                       possible_moves[direction_index]))
+                        if direction_index == "l":
+                            possible_moves[direction_index] = list(
+                                filter(lambda position: move[1] > position[0] >= 0,
+                                       possible_moves[direction_index]))
 
-        # ciclo for deste novo array e para cada possible move da peça atual verifica se não vai ficar em medo,
-        # chamando
-        # a nova função que retornará um True or false, com base neste return, mantém a peça nos possible moves ou remove
-        pieces_fear = {
+        return possible_moves
 
-        }
 
-        acting_player = self.__players[1] if self.__acting_player == 0 else self.__players[0]
-        legal_moves = []
-        opponent_cords = []
+def get_legal_moves(self):
+    # verificar se as peças estão in fear ex do resultado {0:{true}, 1:{False},...}
+    # next step caso existe pelo menos 1 True remove todos os falsos e irá apenas verificar jogadas
+    # válidas para este
+    # array resultante
 
-        # population dictionarie with the index and respective values
-        for piece_index in range(0, len(acting_player.pieces)):
-            piece = acting_player.pieces[piece_index]
-            pieces_fear[piece_index] = self.is_in_fear(piece.get_piece_type(), piece.get_piece_periferics())
+    # ciclo for deste novo array e para cada possible move da peça atual verifica se não vai ficar em medo,
+    # chamando
+    # a nova função que retornará um True or false, com base neste return, mantém a peça nos possible moves ou remove
 
-            # remove those with false as a value if at least one is true
-            for index in pieces_fear:
-                if pieces_fear[index]:
-                    pieces_fear = dict(filter(lambda value: value[1], pieces_fear.items()))
+    pieces_fear = {}
 
-            # TODO
-            # Not to step over the other
+    acting_player = self.__players[1] if self.__acting_player == 0 else self.__players[0]
 
-            for index1 in pieces_fear:
-                pieces_fear[index1] = piece.get_current_pos()
-                for moves in piece.possible_moves():
-                    if moves in pieces_fear[index1]:
-                        piece.get_current_pos()
+    # population dictionary with the index and respective values
+    for piece_index in range(0, len(acting_player.pieces)):
+        piece = acting_player.pieces[piece_index]
+        pieces_fear[piece_index] = self.is_in_fear(isinstance(piece, Elephant), piece.get_piece_periferics())
 
-            for index in pieces_fear:
-                piece = acting_player.pieces[index]
-                for move in piece.possible_moves():
-                    periferics = self.get_periferics(move[0], move[1])
-                    self.is_in_fear(piece.get_piece_type(), periferics)
+        # remove those with false as a value if at least one is true
+        for index in pieces_fear:
+            if pieces_fear[index]:
+                pieces_fear = dict(filter(lambda value: value[1], pieces_fear.items()))
 
-            """
-            Now there needs to be an array "generated" by the Updated dictionary of pieces_ fear
-            with the coordinates of those pieces, BUT in this dict we dont store that right?
-            """
+        # Not to step over the other
+        for index2 in pieces_fear:
+            piece = acting_player.pieces[index2]
+            pieces_fear[index2] = self.step_above_others(piece)
 
-            new_array_of_moves = []
+        for piece_index in pieces_fear:
+            valid_moves = []
+            for move in pieces_fear[piece_index]:
+                periferics = self.get_periferics(move[1], move[0])
+                if self.is_in_fear(piece.get_piece_type(), periferics):
+                    valid_moves.append(move)
+            acting_player.pieces[piece_index].set_legal_moves(valid_moves)
 
-            current_pos = piece.get_current_pos()
-            opponent_cords.__add__(current_pos)
-            for opponent_cords in all_moves:
-                if opponent_cords not in all_moves:
-                    legal_moves.__add__(opponent_cords)
-        return legal_moves
 
-    def display_acting_player_pieces(self):
-        player = self.__players[1 if self.__acting_player == 0 else 0]
-        for index in range(len(player.pieces)):
-            piece = player.pieces[index]
-            piece_pos = piece.get_current_pos()
-            print(f'{index}: {piece.get_name()} ({piece_pos[0]}, {piece_pos[1]})')
+def display_acting_player_pieces(self):
+    player = self.__players[1 if self.__acting_player == 0 else 0]
+    for index in range(len(player.pieces)):
+        piece = player.pieces[index]
+        piece_pos = piece.get_current_pos()
+        print(f'{index}: {piece.get_name()} ({piece_pos[0]}, {piece_pos[1]})')
 
-    def before_results(self):
-        pass
 
-    def get_num_players(self):
-        pass
+def before_results(self):
+    pass
 
-    def get_result(self, pos):
-        if self.__has_winner:
-            return BarcaResult.LOSE if pos == self.__acting_player else BarcaResult.WIN
-        return None
 
-    def is_finished(self) -> bool:
-        return self.__has_winner
+def get_num_players(self):
+    pass
 
-    def validate_action(self, action) -> bool:
-        return True
+
+def get_result(self, pos):
+    if self.__has_winner:
+        return BarcaResult.LOSE if pos == self.__acting_player else BarcaResult.WIN
+    return None
+
+
+def is_finished(self) -> bool:
+    return self.__has_winner
+
+
+def validate_action(self, action) -> bool:
+    return True

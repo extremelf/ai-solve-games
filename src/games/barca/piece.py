@@ -30,3 +30,10 @@ class BarcaPiece:
     def possible_moves(self):
         pass
 
+    @abstractmethod
+    def set_legal_moves(self, moves):
+        pass
+
+    @abstractmethod
+    def get_legal_moves(self):
+        pass
