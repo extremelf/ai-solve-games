@@ -4,7 +4,7 @@ from games.barca.piece import BarcaPiece
 class Lion(BarcaPiece):
     positionx = None
     positiony = None
-    __legal_moves = None
+    legal_moves = []
 
     def __init__(self, name):
         super().__init__(name)
@@ -46,10 +46,8 @@ class Lion(BarcaPiece):
                       and 0 <= self.positiony - i < 10]
         position_r = [[self.positionx, self.positiony + i] for i in range(1) if 0 <= self.positionx - i < 10
                       and 0 <= self.positiony - i < 10]
-        position = [[self.positionx, self.positiony] for i in range(1) if 0 <= self.positionx - i < 10
-                    and 0 <= self.positiony - i < 10]
 
-        return position + position_r + position_l + position_dl + position_dr \
+        return position_r + position_l + position_dl + position_dr \
                + position_d + position_ur + position_u + position_ul
 
     def get_current_pos(self):
@@ -60,7 +58,7 @@ class Lion(BarcaPiece):
         self.positiony = posy
 
     def set_legal_moves(self, moves):
-        self.__legal_moves = moves
+        self.legal_moves = moves
 
     def get_legal_moves(self):
-        return self.__legal_moves
+        return self.legal_moves

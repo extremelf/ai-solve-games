@@ -28,6 +28,7 @@ class BarcaState(State):
         self.__acting_player = 0
 
         self.__has_winner = False
+        self.get_legal_moves()
 
     def get_grid(self):
         return self.__grid
@@ -58,8 +59,11 @@ class BarcaState(State):
         self.__has_winner = self.__check_winner()
 
         self.__acting_player = 1 if self.__acting_player == 0 else 0
+        if not self.__has_winner:
+            self.get_legal_moves()
 
     def clone(self):
+
         new_state = copy.deepcopy(self)
         return new_state
         new_state = BarcaState(self.__num_rows, self.__num_cols, self.__players)
@@ -87,30 +91,6 @@ class BarcaState(State):
                     grid[current_pos[1]][current_pos[0]] = 4
 
         self.display_grid(grid)
-
-    # TODO verificar se o movimento gera perigo para a peça
-    # Retorna se o movimento coloca perigo
-
-    def get_periferics(self, x, y) -> list[list]:
-        position_ur = [[x + i, y - i] for i in range(1, 2) if 0 <= x - i < 10
-                       and 0 <= y - i < 10]
-        position_ul = [[x - i, y - i] for i in range(1) if 0 <= x - i < 10
-                       and 0 <= y - i < 10]
-        position_u = [[x, y - i] for i in range(1, 2) if 0 <= x - i < 10
-                      and 0 <= y - i < 10]
-        position_d = [[x, y + i] for i in range(1, 2) if 0 <= x - i < 10
-                      and 0 <= y - i < 10]
-        position_dr = [[x + i, y + i] for i in range(1, 2) if 0 <= x - i < 10
-                       and 0 <= y - i < 10]
-        position_dl = [[x - i, y + i] for i in range(1, 2) if 0 <= x - i < 10
-                       and 0 <= y - i < 10]
-        position_l = [[x - i, y] for i in range(1, 2) if 0 <= x - i < 10
-                      and 0 <= y - i < 10]
-        position_r = [[x + i, y] for i in range(1, 2) if 0 <= x - i < 10
-                      and 0 <= y - i < 10]
-
-        return position_r + position_l + position_dl + position_dr \
-               + position_d + position_ur + position_u + position_ul
 
     def display_grid(self, grid):
 
@@ -148,6 +128,26 @@ class BarcaState(State):
             print(f' {col}', end="")
         print("")
 
+    def get_periferics(self, x, y) -> list[list]:
+        position_ur = [[x + i, y - i] for i in range(1, 2) if 0 <= x - i < 10
+                       and 0 <= y - i < 10]
+        position_ul = [[x - i, y - i] for i in range(1) if 0 <= x - i < 10
+                       and 0 <= y - i < 10]
+        position_u = [[x, y - i] for i in range(1, 2) if 0 <= x - i < 10
+                      and 0 <= y - i < 10]
+        position_d = [[x, y + i] for i in range(1, 2) if 0 <= x - i < 10
+                      and 0 <= y - i < 10]
+        position_dr = [[x + i, y + i] for i in range(1, 2) if 0 <= x - i < 10
+                       and 0 <= y - i < 10]
+        position_dl = [[x - i, y + i] for i in range(1, 2) if 0 <= x - i < 10
+                       and 0 <= y - i < 10]
+        position_l = [[x - i, y] for i in range(1, 2) if 0 <= x - i < 10
+                      and 0 <= y - i < 10]
+        position_r = [[x + i, y] for i in range(1, 2) if 0 <= x - i < 10
+                      and 0 <= y - i < 10]
+
+        return position_r + position_l + position_dl + position_dr + position_d + position_ur + position_u + position_ul
+
     def is_in_fear(self, piece_type, periferics):
         # TODO verificar periferia da peça atual e verificar se existe perigo e se ira ficar em perigo
         # algum oponente nessas coordenadas retorna true or false caso exista um destes tipos a acontecer
@@ -174,50 +174,49 @@ class BarcaState(State):
 
     def step_above_others(self, piece):
 
-        player = self.__players[1] if self.__acting_player == 0 else self.__players[0]
-        opponent = self.__players[self.__acting_player]
+        player = self.get_current_player()
+        opponent = self.get_oponent_player()
         all_pieces = []
-        for piece in player.pieces:
-            all_pieces.append(piece.get_current_pos())
-        for piece in opponent.pieces:
-            all_pieces.append(piece.get_current_pos())
+        for piece_p in player.pieces:
+            all_pieces.append(piece_p.get_current_pos())
+        for piece_o in opponent.pieces:
+            all_pieces.append(piece_o.get_current_pos())
         possible_moves = piece.possible_moves()
         for direction_index in possible_moves:
             for move in possible_moves[direction_index]:
-                for move in possible_moves[direction_index]:
-                    if [move[1], move[0]] in all_pieces:
-                        if direction_index == "ur":
-                            possible_moves[direction_index] = list(
-                                filter(lambda position: move[1] < position[0] < 10 and move[0] > position[1] >= 0,
-                                       possible_moves[direction_index]))
-                        if direction_index == "ul":
-                            possible_moves[direction_index] = list(
-                                filter(lambda position: move[1] > position[0] >= 0 and move[0] > position[1] >= 0,
-                                       possible_moves[direction_index]))
-                        if direction_index == "dr":
-                            possible_moves[direction_index] = list(
-                                filter(lambda position: move[1] < position[0] < 10 and move[0] < position[1] <= 9,
-                                       possible_moves[direction_index]))
-                        if direction_index == "dl":
-                            possible_moves[direction_index] = list(
-                                filter(lambda position: move[1] > position[0] >= 0 and move[0] > position[1] >= 0,
-                                       possible_moves[direction_index]))
-                        if direction_index == "u":
-                            possible_moves[direction_index] = list(
-                                filter(lambda position: move[0] > position[1] >= 0,
-                                       possible_moves[direction_index]))
-                        if direction_index == "d":
-                            possible_moves[direction_index] = list(
-                                filter(lambda position: move[0] < position[1] <= 9,
-                                       possible_moves[direction_index]))
-                        if direction_index == "r":
-                            possible_moves[direction_index] = list(
-                                filter(lambda position: move[1] < position[0] < 10,
-                                       possible_moves[direction_index]))
-                        if direction_index == "l":
-                            possible_moves[direction_index] = list(
-                                filter(lambda position: move[1] > position[0] >= 0,
-                                       possible_moves[direction_index]))
+                if [move[1], move[0]] in all_pieces:
+                    if direction_index == "ur":
+                        possible_moves[direction_index] = list(
+                            filter(lambda position: not move[1] <= position[1] < 10 and not move[0] <= position[0] <= 0,
+                                   possible_moves[direction_index]))
+                    if direction_index == "ul":
+                        possible_moves[direction_index] = list(
+                            filter(lambda position: not move[1] >= position[1] >= 0 and not move[0] <= position[0] <= 0,
+                                   possible_moves[direction_index]))
+                    if direction_index == "dr":
+                        possible_moves[direction_index] = list(
+                            filter(lambda position: not move[1] <= position[1] < 10 and not move[0] <= position[0] <= 9,
+                                   possible_moves[direction_index]))
+                    if direction_index == "dl":
+                        possible_moves[direction_index] = list(
+                            filter(lambda position: not move[1] >= position[1] >= 0 and not move[0] <= position[0] <= 9,
+                                   possible_moves[direction_index]))
+                    if direction_index == "u":
+                        possible_moves[direction_index] = list(
+                            filter(lambda position: not move[0] >= position[0] >= 0,
+                                   possible_moves[direction_index]))
+                    if direction_index == "d":
+                        possible_moves[direction_index] = list(
+                            filter(lambda position: not move[0] <= position[0] <= 9,
+                                   possible_moves[direction_index]))
+                    if direction_index == "r":
+                        possible_moves[direction_index] = list(
+                            filter(lambda position: not move[1] <= position[1] < 10,
+                                   possible_moves[direction_index]))
+                    if direction_index == "l":
+                        possible_moves[direction_index] = list(
+                            filter(lambda position: not move[1] >= position[1] >= 0,
+                                   possible_moves[direction_index]))
 
         return possible_moves
 
@@ -233,7 +232,7 @@ class BarcaState(State):
 
         pieces_fear = {}
 
-        acting_player = self.__players[1] if self.__acting_player == 0 else self.__players[0]
+        acting_player = self.get_current_player()
 
         # population dictionary with the index and respective values
         for piece_index in range(0, len(acting_player.pieces)):
@@ -249,7 +248,7 @@ class BarcaState(State):
             # remove those with false as a value if at least one is true
         for index in pieces_fear:
             if pieces_fear[index]:
-                pieces_fear = dict(filter(lambda value: value[1], pieces_fear.items()))
+                pieces_fear = dict(filter(lambda item: item[1], pieces_fear.items()))
 
             # Not to step over the other
         for index2 in pieces_fear:
@@ -275,7 +274,7 @@ class BarcaState(State):
 
                 if not self.is_in_fear(piece_type, periferics):
                     valid_moves.append(move)
-            acting_player.pieces[piece_index2].set_legal_moves(valid_moves)
+            piece.set_legal_moves(valid_moves)
 
     def display_acting_player_pieces(self):
         player = self.__players[1 if self.__acting_player == 0 else 0]

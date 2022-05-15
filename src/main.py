@@ -1,13 +1,7 @@
 from games.barca.players.HumanBarcaPlayer import HumanBarcaPLayer
-from games.barca.simulator import BarcaSimulator
-from games.connect4.players.greedy import GreedyConnect4Player
-from games.connect4.players.luis_fernandes_player import LuisFernandesPlayer
-from games.game_simulator import GameSimulator
-from games.poker.players.always_bet_king import AlwaysBetKingKuhnPokerPlayer
-from games.poker.players.luis_fernandes_player import LuisFernandesKuhnPlayer
-from games.barca.players.minimax import MinimaxBarcaPlayer
-from games.barca.players.Greedy import GreedyBarcaPlayer
 from games.barca.players.random import RandomBarcaPLayer
+from games.barca.simulator import BarcaSimulator
+from games.game_simulator import GameSimulator
 
 
 def run_simulation(desc: str, simulator: GameSimulator, iterations: int):
@@ -32,7 +26,7 @@ def main():
     # for sim in poker_simulations:
     #   run_simulation(sim["name"], KuhnPokerSimulator(sim["player1"], sim["player2"]), num_iterations)
 
-    run_simulation("teste", BarcaSimulator(HumanBarcaPLayer("José"), HumanBarcaPLayer("Joaquim")), 1000)
+    run_simulation("teste", BarcaSimulator(HumanBarcaPLayer("José"), RandomBarcaPLayer("Joaquim")), 25)
 
 
 if __name__ == "__main__":

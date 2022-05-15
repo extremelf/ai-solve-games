@@ -33,38 +33,37 @@ class MinimaxBarcaPlayer(BarcaPlayer):
 
             for piece in state.get_current_player().pieces:
                 possible_moves = piece.get_legal_moves()
-                current_pos = piece.get_current_pos()
-                if [current_pos[1], current_pos[0]] in possible_moves:
-                    print("WHY IN DA FUCK")
-                for move in possible_moves:
-                    action = BarcaAction(piece, move[1], move[2])
-                    if state.validate_action(action):
-                        previous_a = value
-                        next_state = state.clone()
-                        next_state.play(action)
-                        value = max(value, self.minimax(next_state, depth - 1, alpha, beta, False))
-                        alpha = max(alpha, value)
+                if len(possible_moves) > 0:
+                    for move in possible_moves:
+                        action = BarcaAction(piece, move[1], move[0])
+                        if state.validate_action(action):
+                            previous_a = value
+                            next_state = state.clone()
+                            next_state.play(action)
+                            value = max(value, self.minimax(next_state, depth - 1, alpha, beta, False))
+                            alpha = max(alpha, value)
 
-                        if value >= previous_a:
-                            selected_move = action
-                        if alpha >= beta:
-                            break
+                            if value >= previous_a:
+                                selected_move = action
+                            if alpha >= beta:
+                                break
             if is_initial_node:
                 return selected_move
             return value
         else:
             value = sys.maxsize
             for piece in state.get_oponent_player().pieces:
-                possible_moves = piece.possible_moves()
-                for move in possible_moves:
-                    action = BarcaAction(piece, move[1], move[0])
-                    if state.validate_action(action):
-                        next_state = state.clone()
-                        next_state.play(action)
-                        value = min(value, self.minimax(next_state, depth - 1, alpha, beta, False))
-                        beta = min(beta, value)
-                        if beta <= alpha:
-                            break
+                possible_moves = piece.get_legal_moves()
+                if len(possible_moves) > 0:
+                    for move in possible_moves:
+                        action = BarcaAction(piece, move[1], move[0])
+                        if state.validate_action(action):
+                            next_state = state.clone()
+                            next_state.play(action)
+                            value = min(value, self.minimax(next_state, depth - 1, alpha, beta, False))
+                            beta = min(beta, value)
+                            if beta <= alpha:
+                                break
             return value
 
     def get_action(self, state: BarcaState):

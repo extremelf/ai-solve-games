@@ -5,11 +5,10 @@ class Elephant(BarcaPiece):
     positionx = None
     positiony = None
     piece_type = 'Elephant'
-    legal_moves = []
+    legal_moves = None
 
     def __init__(self, name):
         super().__init__(name)
-
 
     def initialize_positions(self, x, y):
         if self.positionx is None and self.positiony is None:
@@ -60,11 +59,8 @@ class Elephant(BarcaPiece):
                       and 0 <= self.positiony - i < 10]
         position_r = [[self.positionx, self.positiony + i] for i in range(1) if 0 <= self.positionx - i < 10
                       and 0 <= self.positiony - i < 10]
-        position = [[self.positionx, self.positiony] for i in range(1) if 0 <= self.positionx - i < 10
-                    and 0 <= self.positiony - i < 10]
 
-        return position + position_r + position_l + position_dl + position_dr \
-               + position_d + position_ur + position_u + position_ul
+        return position_r + position_l + position_dl + position_dr + position_d + position_ur + position_u + position_ul
 
     def set_current_pos(self, posx, posy):
         self.positionx = posx

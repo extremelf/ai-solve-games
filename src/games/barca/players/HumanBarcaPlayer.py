@@ -12,7 +12,6 @@ class HumanBarcaPLayer(BarcaPlayer):
         state.display()
         print("Pieces: ")
         state.display_acting_player_pieces()
-        state.get_legal_moves()
         while True:
             piece_index = int(input(f'Player{state.get_acting_player(), self.get_name()}, choose a piece:'))
             while piece_index not in range(0, len(self.pieces)):
